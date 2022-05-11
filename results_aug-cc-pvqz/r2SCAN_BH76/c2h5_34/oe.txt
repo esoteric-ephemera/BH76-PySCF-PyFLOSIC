@@ -1,0 +1,29 @@
+----------------------------------------
+Begin Batch Job Prologue Tue May 10 09:43:23 EDT 2022
+Job ID:           444491
+Username:         tuf53878
+Group:            perdew
+Job Name:         BH76
+Resources List:   walltime=02:00:00,nodes=1:ppn=20,neednodes=1:ppn=20
+Queue:            normal
+Account:          
+Nodes:            e068 
+----------------------------------------
+End Batch Job Prologue Tue May 10 09:43:28 EDT 2022
+----------------------------------------
+WARN: system HOMO -0.201257077750413 >= system LUMO -0.201257077750413
+overwrite output file: c2h5_34.txt
+----------------------------------------
+Begin Batch Job Epilogue Tue May 10 09:48:44 EDT 2022
+Job ID:           444491
+Username:         tuf53878
+Group:            perdew
+Job Name:         BH76
+Session:          18495
+Limits:           walltime=02:00:00,nodes=1:ppn=20,neednodes=1:ppn=20
+Resources:        cput=01:39:25,vmem=5494860kb,walltime=00:05:16,mem=2481352kb,energy_used=0
+Queue:            normal
+Account:          
+----------------------------------------
+End Batch Job Epilogue Tue May 10 09:49:09 EDT 2022
+----------------------------------------

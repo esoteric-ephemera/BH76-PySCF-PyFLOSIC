@@ -1,0 +1,199 @@
+#INFO: **** input file is /home/tuf53878/BH76/LSDA@HF_BH76/c2h5_34/run_single_point.py ****
+import numpy as np
+from pyscf import gto,dft
+
+opt_type = {
+    'float': ['tol','levelshift'],
+    'int': ['gridsize','max_cycle','charge','2S','verbose'],
+    'bool': ['symm','restricted'],
+    'str': ['xyz_fl','basis','xc','xc_lib','ecp','logfile','init','chkfl']
+}
+
+def str_parse(key,val):
+    if key in opt_type['str']:
+        # quick return
+        return val
+    elif key in opt_type['float']:
+        return float(val)
+    elif key in opt_type['int']:
+        return int(val)
+    elif key in opt_type['bool']:
+        if val.lower() in ['true','t']:
+            return True
+        elif val.lower() in ['false','f']:
+            return False
+        else:
+            estr = "Could not process key {:} with value {:}; expected boolean".format(key,val)
+            raise SystemExit(estr)
+    else:
+        estr = "Unknown key {:} with value {:}".format(key,val)
+        raise SystemExit(estr)
+
+def parse_inp(flnm):
+
+    opts = {}
+    with open(flnm,'r') as tfl:
+        for row in tfl:
+            tmp = [x.strip() for x in row.split('=')]
+            if len(tmp) == 1:
+                # blank line
+                continue
+            if ':' in tmp[1]:
+                # dict type option
+                tmp2 = [x.strip() for x in tmp[1].split(';')]
+                opts[tmp[0]] = {}
+                for x in tmp2:
+                    tmp3 = [y.strip() for y in x.split(':')]
+                    opts[tmp[0]][tmp3[0].strip()] = str_parse(tmp[0],tmp3[1])
+            else:
+                opts[tmp[0]] = str_parse(tmp[0],tmp[1])
+
+    return opts
+
+def molscf():
+
+    dopts = {
+        'gridsize': 5, 'basis': 'def2-QZVP', 'symm': False,
+        'tol': 1.e-7, 'max_cycle': 500, 'charge': 0, '2S': 0,
+        'xc': '1.0*SLATERX, 1.0*PW92C', 'xc_lib': 'XCFun', 'verbose': 4,
+        'restricted': False, 'ecp' : {}
+        }
+
+    uopts = parse_inp('./inp.txt')
+
+    for akey in uopts:
+        dopts[akey] = uopts[akey]
+
+    mol = gto.M(atom=dopts['xyz_fl'], basis=dopts['basis'], symmetry=dopts['symm'], \
+        charge=dopts['charge'], spin=dopts['2S'], output = dopts['logfile'], \
+        verbose = dopts['verbose'], ecp = dopts['ecp'])
+
+    if dopts['restricted']:
+        kscalc = dft.RKS(mol)
+    else:
+        kscalc = dft.UKS(mol)
+
+    if dopts['init'] == 'chkfl':
+        kscalc.chkfile = dopts['chkfl']
+        kscalc.init_guess = 'chkfile'
+    elif dopts['init'] == 'HF DM':
+        from pyscf import scf
+        if dopts['restricted']:
+            hfcalc = scf.RHF(mol)
+        else:
+            hfcalc = scf.UHF(mol)
+
+        hfcalc.max_cycle = dopts['max_cycle']
+        hfcalc.conv_tol = dopts['tol']
+        if 'levelshift' in dopts:
+            hfcalc.level_shift = dopts['levelshift']
+        hfcalc.kernel()
+        kscalc.init_guess = hfcalc.make_rdm1()
+
+    kscalc.max_cycle = dopts['max_cycle']
+    kscalc.conv_tol = dopts['tol']
+    kscalc.grids.level = dopts['gridsize']
+
+    if dopts['xc_lib'] == 'XCFun':
+        kscalc._numint.libxc = dft.xcfun
+    elif dopts['xc_lib'] != 'LibXC':
+        raise SystemExit('Unknown XC library '+ dopts['xc_lib'])
+    kscalc.xc = dopts['xc']
+
+    if 'levelshift' in dopts:
+        kscalc.level_shift = dopts['levelshift']
+
+    e0 = kscalc.kernel()
+
+    odict = {
+        'Etot': kscalc.e_tot, 'Converged': kscalc.converged,
+    }
+    fname = './pyscf_run.yaml'
+    with open(fname,'w+') as tfl:
+        for akey in odict:
+            tfl.write('{:}: {:}\n'.format(akey,odict[akey]))
+
+    np.save('./orbital_eigenvalues.npy',kscalc.mo_energy)
+    np.save('./orbital_occupancies.npy',kscalc.mo_occ)
+    np.save('./orbital_coefficients.npy',kscalc.mo_coeff)
+
+    return e0
+
+if __name__ == "__main__":
+
+    #print(parse_inp('./sample.txt'))
+    molscf()
+#INFO: ******************** input file end ********************
+
+
+System: uname_result(system='Linux', node='e071', release='3.10.0-1160.25.1.el7.x86_64', version='#1 SMP Wed Apr 28 21:49:45 UTC 2021', machine='x86_64')  Threads 20
+Python 3.9.4 (default, Jun 10 2021, 14:03:49) 
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]
+numpy 1.22.2  scipy 1.8.0
+Date: Tue May 10 09:01:32 2022
+PySCF version 2.0.1
+PySCF path  /home/tuf53878/.local/lib/python3.9/site-packages/pyscf
+
+[CONFIG] conf_file None
+[INPUT] verbose = 4
+[INPUT] num. atoms = 7
+[INPUT] num. electrons = 17
+[INPUT] charge = 0
+[INPUT] spin (= nelec alpha-beta = 2S) = 1
+[INPUT] symmetry False subgroup None
+[INPUT] Mole.unit = angstrom
+[INPUT]  1 C     -0.025682140000  -0.624909950000   0.000000000000 AA   -0.048532210893  -1.180908658016   0.000000000000 Bohr
+[INPUT]  2 C     -0.025682140000   0.866131620000   0.000000000000 AA   -0.048532210893   1.636751549626   0.000000000000 Bohr
+[INPUT]  3 H      0.993975680000  -1.028735690000   0.000000000000 AA    1.878341809678  -1.944028708665   0.000000000000 Bohr
+[INPUT]  4 H     -0.523727420000  -1.024534020000   0.883419080000 AA   -0.989701387725  -1.936088703100   1.669420114415 Bohr
+[INPUT]  5 H     -0.523727420000  -1.024534020000  -0.883419080000 AA   -0.989701387725  -1.936088703100  -1.669420114415 Bohr
+[INPUT]  6 H      0.052421720000   1.418291030000  -0.924319190000 AA    0.099062693779   2.680181611627  -1.746710120780 Bohr
+[INPUT]  7 H      0.052421720000   1.418291030000   0.924319190000 AA    0.099062693779   2.680181611627   1.746710120780 Bohr
+
+nuclear repulsion = 36.9778116102678
+number of shells = 108
+number of NR pGTOs = 426
+number of NR cGTOs = 390
+basis = aug-cc-pvqz
+ecp = {}
+CPU time:         2.35
+
+
+******** <class 'pyscf.dft.uks.UKS'> ********
+method = UKS-UHF
+initial guess = chkfile
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+SCF conv_tol = 1e-07
+SCF conv_tol_grad = None
+SCF max_cycles = 0
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = ./wvfn
+max_memory 4000 MB (current use 60 MB)
+number electrons alpha = 9  beta = 8
+XC library pyscf.dft.libxc version 5.1.7
+    S. Lehtola, C. Steigemann, M. J. Oliveira, and M. A. Marques, SoftwareX 7, 1 (2018)
+XC functionals = LDA_X, LDA_C_PW
+    P. A. M. Dirac, Math. Proc. Cambridge Philos. Soc. 26, 376 (1930)
+    F. Bloch, Z. Phys. 57, 545 (1929)
+    J. P. Perdew and Y. Wang, Phys. Rev. B 45, 13244 (1992)
+radial grids: 
+    Treutler-Ahlrichs [JCP 102, 346 (1995); DOI:10.1063/1.469408] (M4) radial grids
+    
+becke partition: Becke, JCP 88, 2547 (1988); DOI:10.1063/1.454033
+pruning grids: <function nwchem_prune at 0x2adfbe71d940>
+grids dens level: 9
+symmetrized grids: False
+atomic radii adjust function: <function treutler_atomic_radii_adjust at 0x2adfbe71d8b0>
+small_rho_cutoff = 1e-07
+Set gradient conv threshold to 0.000316228
+tot grids = 1167208
+init E= -78.3766752327591
+  alpha nocc = 9  HOMO = -0.173603118870615  LUMO = -0.0113581686526356
+  beta  nocc = 8  HOMO = -0.307639814643415  LUMO = -0.107239257835453
+SCF not converged.
+SCF energy = -78.3766752327591 after 0 cycles  <S^2> = 0.75377041  2S+1 = 2.0037669

@@ -1,0 +1,15 @@
+gridsize = 9
+symm = False
+tol = 1e-07
+max_cycle = 0
+verbose = 4
+charge = 0
+2S = 0
+restricted = True
+xc = GGA_X_PBE, GGA_C_PBE
+xc_lib = LibXC
+xyz_fl = ./struc.xyz
+basis = aug-cc-pvqz
+logfile = NH3.txt
+init = chkfl
+chkfl = ./wvfn

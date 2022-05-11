@@ -1,0 +1,176 @@
+----------------------------------------
+Begin Batch Job Prologue Mon May  9 13:29:50 EDT 2022
+Job ID:           444416
+Username:         tuf53878
+Group:            perdew
+Job Name:         BH76
+Resources List:   walltime=24:00:00,nodes=1:ppn=20,neednodes=1:ppn=20
+Queue:            normal
+Account:          
+Nodes:            e069 
+----------------------------------------
+End Batch Job Prologue Mon May  9 13:29:55 EDT 2022
+----------------------------------------
+WARN: system HOMO -0.200682058212715 >= system LUMO -0.200682058212715
+output file: C2H5.txt
+output file: C2H6.txt
+output file: C5H8.txt
+WARN: system HOMO -0.17515044952821 >= system LUMO -0.17515044952821
+output file: CH2OH.txt
+output file: CH4.txt
+output file: H2.txt
+output file: H2O.txt
+output file: H2S.txt
+WARN: beta  nocc = 8  HOMO -0.269416368160625 >= LUMO -0.269416368160619
+WARN: system HOMO -0.269416368160619 >= system LUMO -0.269416368160619
+output file: HS.txt
+WARN: system HOMO -0.152242940739633 >= system LUMO -0.152242940739633
+output file: N2H.txt
+output file: N2H2.txt
+WARN: system HOMO -0.22923785721458 >= system LUMO -0.229237857214581
+output file: NH.txt
+WARN: system HOMO -0.259615861963107 >= system LUMO -0.259615861963107
+output file: NH2.txt
+output file: NH3.txt
+WARN: beta  nocc = 3  HOMO -0.329246958409718 >= LUMO -0.329246958409718
+WARN: system HOMO -0.329246958409712 >= system LUMO -0.329246958409718
+output file: O.txt
+WARN: system HOMO -0.21188631752671 >= system LUMO -0.21188631752671
+output file: PH2.txt
+output file: PH3.txt
+WARN: system HOMO -0.272663742525679 >= system LUMO -0.272663742525679
+output file: RKT01.txt
+WARN: system HOMO -0.291850727970418 >= system LUMO -0.291850727970418
+output file: RKT02.txt
+WARN: system HOMO -0.200940845386076 >= system LUMO -0.200940845386076
+output file: RKT03.txt
+WARN: system HOMO -0.30033160756972 >= system LUMO -0.30033160756972
+output file: RKT04.txt
+WARN: system HOMO -0.182899037738565 >= system LUMO -0.182899037738565
+output file: RKT05.txt
+WARN: system HOMO -0.183625884438676 >= system LUMO -0.183625884438676
+output file: RKT06.txt
+WARN: system HOMO -0.288158906947879 >= system LUMO -0.288158906947879
+output file: RKT07.txt
+WARN: system HOMO -0.260256562784211 >= system LUMO -0.260256562784211
+output file: RKT08.txt
+WARN: system HOMO -0.29471819127637 >= system LUMO -0.29471819127637
+output file: RKT09.txt
+WARN: system HOMO -0.344616988011785 >= system LUMO -0.344616988011785
+output file: RKT10.txt
+WARN: beta  nocc = 8  HOMO -0.346377883053369 >= LUMO -0.346355378204012
+WARN: system HOMO -0.27068383991679 >= system LUMO -0.346355378204012
+output file: RKT11.txt
+WARN: system HOMO -0.192090301714668 >= system LUMO -0.192090301714668
+output file: RKT12.txt
+WARN: system HOMO -0.177568402998992 >= system LUMO -0.177568402998992
+output file: RKT13.txt
+WARN: beta  nocc = 4  HOMO -0.347806081991838 >= LUMO -0.347806081991838
+WARN: system HOMO -0.255971192174401 >= system LUMO -0.347806081991838
+output file: RKT14.txt
+WARN: system HOMO -0.185245132190791 >= system LUMO -0.185245132190791
+output file: RKT15.txt
+WARN: system HOMO -0.21534130808398 >= system LUMO -0.21534130808398
+output file: RKT16.txt
+WARN: system HOMO -0.306567809348218 >= system LUMO -0.326819499283163
+WARN: system HOMO -0.00202144191397337 >= system LUMO -0.0430767251788723
+output file: RKT17.txt
+WARN: system HOMO -0.219380680313264 >= system LUMO -0.247009355308307
+WARN: system HOMO -0.0927636131129928 >= system LUMO -0.162882111533789
+output file: RKT18.txt
+WARN: system HOMO -0.211291532581113 >= system LUMO -0.246150897834085
+WARN: system HOMO -0.078079267950435 >= system LUMO -0.146473935374338
+output file: RKT19.txt
+WARN: system HOMO -0.230348820138014 >= system LUMO -0.230348820138014
+output file: RKT20.txt
+WARN: system HOMO -0.236536701021119 >= system LUMO -0.236536701021119
+output file: RKT21.txt
+output file: RKT22.txt
+output file: c2h4.txt
+WARN: system HOMO -0.192641207698572 >= system LUMO -0.192641207698572
+output file: c2h5ts.txt
+WARN: system HOMO -0.205715380127423 >= system LUMO -0.205715380127423
+output file: c3h7.txt
+WARN: system HOMO -0.208886584989472 >= system LUMO -0.208886584989472
+output file: c3h7ts.txt
+WARN: system HOMO -0.217820258881546 >= system LUMO -0.217820258881546
+output file: ch3.txt
+output file: ch3cl.txt
+output file: ch3f.txt
+WARN: system HOMO -0.236858243657346 >= system LUMO -0.236858243657346
+WARN: beta  nocc = 17  HOMO -0.161599659325104 >= LUMO -0.161595781500068
+output file: ch3fclts.txt
+output file: ch3oh.txt
+output file: cl-.txt
+WARN: beta  nocc = 8  HOMO -0.326347725229951 >= LUMO -0.326347725229947
+WARN: system HOMO -0.326347725229947 >= system LUMO -0.326347725229947
+output file: cl.txt
+WARN: HOMO 0.113309382380572 == LUMO 0.113309384546814
+output file: clch3clcomp.txt
+output file: clch3clts.txt
+output file: clf.txt
+output file: co.txt
+output file: f-.txt
+WARN: beta  nocc = 4  HOMO -0.410255477421454 >= LUMO -0.410255477421453
+WARN: system HOMO -0.410255477421453 >= system LUMO -0.410255477421453
+output file: f.txt
+output file: f2.txt
+WARN: HOMO 0.130648994978477 == LUMO 0.130648995053952
+output file: fch3clcomp1.txt
+output file: fch3clcomp2.txt
+WARN: HOMO 0.131607867663913 == LUMO 0.131607995763393
+output file: fch3clts.txt
+output file: fch3fcomp.txt
+output file: fch3fts.txt
+output file: h.txt
+WARN: system HOMO -0.198631133657653 >= system LUMO -0.198631133657653
+output file: hch3clts.txt
+output file: hcl.txt
+WARN: system HOMO -0.177568402998984 >= system LUMO -0.177568402998984
+output file: hclhts.txt
+output file: hcn.txt
+output file: hcnts.txt
+WARN: system HOMO -0.179050843226214 >= system LUMO -0.179050843226214
+output file: hco.txt
+WARN: system HOMO -0.189381191068444 >= system LUMO -0.189381191068444
+output file: hcots.txt
+output file: hf.txt
+WARN: system HOMO -0.25903343810951 >= system LUMO -0.25903343810951
+WARN: beta  nocc = 9  HOMO -0.0988437727962866 >= LUMO -0.0988437727962826
+output file: hf2ts.txt
+WARN: system HOMO -0.15966189093323 >= system LUMO -0.15966189093323
+output file: hfch3ts.txt
+WARN: system HOMO -0.125036493623327 >= system LUMO -0.125036493623327
+output file: hfhts.txt
+WARN: system HOMO -0.152244011019312 >= system LUMO -0.152244011019312
+output file: hn2.txt
+WARN: system HOMO -0.155832232293685 >= system LUMO -0.155832232293685
+output file: hn2ts.txt
+output file: hnc.txt
+output file: hoch3fcomp1.txt
+output file: hoch3fcomp2.txt
+WARN: HOMO 0.13597423705508 == LUMO 0.136866534480881
+output file: hoch3fts.txt
+output file: n2.txt
+output file: n2o.txt
+WARN: system HOMO -0.145229509225627 >= system LUMO -0.145229509225627
+output file: n2ohts.txt
+WARN: HOMO 0.258527706039991 == LUMO 0.258527706039993
+output file: oh-.txt
+WARN: beta  nocc = 4  HOMO -0.365463107958373 >= LUMO -0.36546310795837
+WARN: system HOMO -0.36546310795837 >= system LUMO -0.36546310795837
+output file: oh.txt
+----------------------------------------
+Begin Batch Job Epilogue Mon May  9 15:22:17 EDT 2022
+Job ID:           444416
+Username:         tuf53878
+Group:            perdew
+Job Name:         BH76
+Session:          22857
+Limits:           walltime=24:00:00,nodes=1:ppn=20,neednodes=1:ppn=20
+Resources:        cput=36:55:17,vmem=6378168kb,walltime=01:52:22,mem=3380532kb,energy_used=0
+Queue:            normal
+Account:          
+----------------------------------------
+End Batch Job Epilogue Mon May  9 15:22:42 EDT 2022
+----------------------------------------

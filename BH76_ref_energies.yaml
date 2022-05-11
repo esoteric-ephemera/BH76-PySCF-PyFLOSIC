@@ -1,0 +1,440 @@
+1:
+  Ref: 17.7
+  Stoich:
+    h: -1
+    n2o: -1
+    n2ohts: 1
+2:
+  Ref: 82.6
+  Stoich:
+    n2: -1
+    n2ohts: 1
+    oh: -1
+3:
+  Ref: 42.1
+  Stoich:
+    h: -1
+    hf: -1
+    hfhts: 1
+4:
+  Ref: 42.1
+  Stoich:
+    h: -1
+    hf: -1
+    hfhts: 1
+5:
+  Ref: 17.8
+  Stoich:
+    h: -1
+    hcl: -1
+    hclhts: 1
+6:
+  Ref: 17.8
+  Stoich:
+    h: -1
+    hcl: -1
+    hclhts: 1
+7:
+  Ref: 30.5
+  Stoich:
+    ch3f: -1
+    h: -1
+    hfch3ts: 1
+8:
+  Ref: 56.9
+  Stoich:
+    ch3: -1
+    hf: -1
+    hfch3ts: 1
+9:
+  Ref: 1.5
+  Stoich:
+    f2: -1
+    h: -1
+    hf2ts: 1
+10:
+  Ref: 104.8
+  Stoich:
+    f: -1
+    hf: -1
+    hf2ts: 1
+11:
+  Ref: 7.1
+  Stoich:
+    ch3: -1
+    ch3fclts: 1
+    clf: -1
+12:
+  Ref: 59.8
+  Stoich:
+    ch3f: -1
+    ch3fclts: 1
+    cl: -1
+13:
+  Ref: -0.6
+  Stoich:
+    ch3f: -1
+    f-: -1
+    fch3fts: 1
+14:
+  Ref: -0.6
+  Stoich:
+    ch3f: -1
+    f-: -1
+    fch3fts: 1
+15:
+  Ref: 13.4
+  Stoich:
+    fch3fcomp: -1
+    fch3fts: 1
+16:
+  Ref: 13.4
+  Stoich:
+    fch3fcomp: -1
+    fch3fts: 1
+17:
+  Ref: 2.5
+  Stoich:
+    ch3cl: -1
+    cl-: -1
+    clch3clts: 1
+18:
+  Ref: 2.5
+  Stoich:
+    ch3cl: -1
+    cl-: -1
+    clch3clts: 1
+19:
+  Ref: 13.5
+  Stoich:
+    clch3clcomp: -1
+    clch3clts: 1
+20:
+  Ref: 13.5
+  Stoich:
+    clch3clcomp: -1
+    clch3clts: 1
+21:
+  Ref: -12.3
+  Stoich:
+    ch3cl: -1
+    f-: -1
+    fch3clts: 1
+22:
+  Ref: 19.8
+  Stoich:
+    ch3f: -1
+    cl-: -1
+    fch3clts: 1
+23:
+  Ref: 3.5
+  Stoich:
+    fch3clcomp1: -1
+    fch3clts: 1
+24:
+  Ref: 29.6
+  Stoich:
+    fch3clcomp2: -1
+    fch3clts: 1
+25:
+  Ref: -2.7
+  Stoich:
+    ch3f: -1
+    hoch3fts: 1
+    oh-: -1
+26:
+  Ref: 17.6
+  Stoich:
+    ch3oh: -1
+    f-: -1
+    hoch3fts: 1
+27:
+  Ref: 11.0
+  Stoich:
+    hoch3fcomp2: -1
+    hoch3fts: 1
+28:
+  Ref: 47.7
+  Stoich:
+    hoch3fcomp1: -1
+    hoch3fts: 1
+29:
+  Ref: 14.6
+  Stoich:
+    h: -1
+    hn2ts: 1
+    n2: -1
+30:
+  Ref: 10.9
+  Stoich:
+    hn2: -1
+    hn2ts: 1
+31:
+  Ref: 3.2
+  Stoich:
+    co: -1
+    h: -1
+    hcots: 1
+32:
+  Ref: 22.8
+  Stoich:
+    hco: -1
+    hcots: 1
+33:
+  Ref: 2.0
+  Stoich:
+    c2h4: -1
+    c2h5ts: 1
+    h: -1
+34:
+  Ref: 42.0
+  Stoich:
+    c2h5_34: -1
+    c2h5ts: 1
+35:
+  Ref: 6.4
+  Stoich:
+    c2h4: -1
+    c3h7ts: 1
+    ch3: -1
+36:
+  Ref: 33.0
+  Stoich:
+    c3h7: -1
+    c3h7ts: 1
+37:
+  Ref: 48.1
+  Stoich:
+    hcn: -1
+    hcnts: 1
+38:
+  Ref: 33.0
+  Stoich:
+    hcnts: 1
+    hnc: -1
+39:
+  Ref: 6.1
+  Stoich:
+    RKT01: 1
+    h: -1
+    hcl: -1
+40:
+  Ref: 8.0
+  Stoich:
+    H2: -1
+    RKT01: 1
+    cl: -1
+41:
+  Ref: 5.2
+  Stoich:
+    H2: -1
+    RKT02: 1
+    oh: -1
+42:
+  Ref: 21.6
+  Stoich:
+    H2O: -1
+    RKT02: 1
+    h: -1
+43:
+  Ref: 11.9
+  Stoich:
+    H2: -1
+    RKT03: 1
+    ch3: -1
+44:
+  Ref: 15.0
+  Stoich:
+    CH4: -1
+    RKT03: 1
+    h: -1
+45:
+  Ref: 6.3
+  Stoich:
+    CH4: -1
+    RKT04: 1
+    oh: -1
+46:
+  Ref: 19.5
+  Stoich:
+    H2O: -1
+    RKT04: 1
+    ch3: -1
+47:
+  Ref: 9.7
+  Stoich:
+    H2: -1
+    RKT06: 1
+    h: -1
+48:
+  Ref: 9.7
+  Stoich:
+    H2: -1
+    RKT06: 1
+    h: -1
+49:
+  Ref: 3.4
+  Stoich:
+    NH3: -1
+    RKT07: 1
+    oh: -1
+50:
+  Ref: 13.7
+  Stoich:
+    H2O: -1
+    NH2: -1
+    RKT07: 1
+51:
+  Ref: 1.8
+  Stoich:
+    RKT08: 1
+    ch3: -1
+    hcl: -1
+52:
+  Ref: 6.8
+  Stoich:
+    CH4: -1
+    RKT08: 1
+    cl: -1
+53:
+  Ref: 3.5
+  Stoich:
+    C2H6: -1
+    RKT09: 1
+    oh: -1
+54:
+  Ref: 20.4
+  Stoich:
+    C2H5: -1
+    H2O: -1
+    RKT09: 1
+55:
+  Ref: 1.6
+  Stoich:
+    H2: -1
+    RKT10: 1
+    f: -1
+56:
+  Ref: 33.8
+  Stoich:
+    RKT10: 1
+    h: -1
+    hf: -1
+57:
+  Ref: 14.4
+  Stoich:
+    CH4: -1
+    O: -1
+    RKT11: 1
+58:
+  Ref: 8.9
+  Stoich:
+    RKT11: 1
+    ch3: -1
+    oh: -1
+59:
+  Ref: 2.9
+  Stoich:
+    PH3: -1
+    RKT12: 1
+    h: -1
+60:
+  Ref: 24.7
+  Stoich:
+    H2: -1
+    PH2: -1
+    RKT12: 1
+61:
+  Ref: 10.9
+  Stoich:
+    RKT14: 1
+    h: -1
+    oh: -1
+62:
+  Ref: 13.2
+  Stoich:
+    H2: -1
+    O: -1
+    RKT14: 1
+63:
+  Ref: 3.9
+  Stoich:
+    H2S: -1
+    RKT16: 1
+    h: -1
+64:
+  Ref: 17.2
+  Stoich:
+    H2: -1
+    HS: -1
+    RKT16: 1
+65:
+  Ref: 10.4
+  Stoich:
+    O: -1
+    RKT17: 1
+    hcl: -1
+66:
+  Ref: 9.9
+  Stoich:
+    RKT17: 1
+    cl: -1
+    oh: -1
+67:
+  Ref: 8.9
+  Stoich:
+    NH2: -1
+    RKT18: 1
+    ch3: -1
+68:
+  Ref: 22.0
+  Stoich:
+    CH4: -1
+    NH: -1
+    RKT18: 1
+69:
+  Ref: 9.8
+  Stoich:
+    C2H5: -1
+    NH2: -1
+    RKT19: 1
+70:
+  Ref: 19.4
+  Stoich:
+    C2H6: -1
+    NH: -1
+    RKT19: 1
+71:
+  Ref: 11.3
+  Stoich:
+    C2H6: -1
+    NH2: -1
+    RKT20: 1
+72:
+  Ref: 17.8
+  Stoich:
+    C2H5: -1
+    NH3: -1
+    RKT20: 1
+73:
+  Ref: 13.9
+  Stoich:
+    CH4: -1
+    NH2: -1
+    RKT21: 1
+74:
+  Ref: 16.9
+  Stoich:
+    NH3: -1
+    RKT21: 1
+    ch3: -1
+75:
+  Ref: 39.7
+  Stoich:
+    C5H8: -1
+    RKT22: 1
+76:
+  Ref: 39.7
+  Stoich:
+    C5H8: -1
+    RKT22: 1

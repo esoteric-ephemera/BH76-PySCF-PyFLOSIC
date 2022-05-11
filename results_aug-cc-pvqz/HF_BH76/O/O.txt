@@ -1,0 +1,183 @@
+#INFO: **** input file is /home/tuf53878/BH76/HF_BH76/O/run_single_point.py ****
+import numpy as np
+from pyscf import gto,scf
+
+opt_type = {
+    'float': ['tol','levelshift'],
+    'int': ['gridsize','max_cycle','charge','2S','verbose'],
+    'bool': ['symm','restricted'],
+    'str': ['xyz_fl','basis','xc','xc_lib','ecp','logfile','checkfile']
+}
+
+def str_parse(key,val):
+    if key in opt_type['str']:
+        # quick return
+        return val
+    elif key in opt_type['float']:
+        return float(val)
+    elif key in opt_type['int']:
+        return int(val)
+    elif key in opt_type['bool']:
+        if val.lower() in ['true','t']:
+            return True
+        elif val.lower() in ['false','f']:
+            return False
+        else:
+            estr = "Could not process key {:} with value {:}; expected boolean".format(key,val)
+            raise SystemExit(estr)
+    else:
+        estr = "Unknown key {:} with value {:}".format(key,val)
+        raise SystemExit(estr)
+
+def parse_inp(flnm):
+
+    opts = {}
+    with open(flnm,'r') as tfl:
+        for row in tfl:
+            tmp = [x.strip() for x in row.split('=')]
+            if len(tmp) == 1:
+                # blank line
+                continue
+            if ':' in tmp[1]:
+                # dict type option
+                tmp2 = [x.strip() for x in tmp[1].split(';')]
+                opts[tmp[0]] = {}
+                for x in tmp2:
+                    tmp3 = [y.strip() for y in x.split(':')]
+                    opts[tmp[0]][tmp3[0].strip()] = str_parse(tmp[0],tmp3[1])
+            else:
+                opts[tmp[0]] = str_parse(tmp[0],tmp[1])
+
+    return opts
+
+def molscf():
+
+    dopts = {
+        'basis': 'def2-QZVP', 'symm': False,
+        'tol': 1.e-7, 'max_cycle': 500, 'charge': 0, '2S': 0,
+        'verbose': 4, 'restricted': False, 'ecp' : {},
+        'checkfile' : './wvfn'
+        }
+
+    uopts = parse_inp('./inp.txt')
+
+    for akey in uopts:
+        dopts[akey] = uopts[akey]
+
+    mol = gto.M(atom=dopts['xyz_fl'], basis=dopts['basis'], symmetry=dopts['symm'], \
+        charge=dopts['charge'], spin=dopts['2S'], output = dopts['logfile'], \
+        verbose = dopts['verbose'], ecp = dopts['ecp'])
+
+    if dopts['restricted']:
+        hfcalc = scf.RHF(mol)
+    else:
+        hfcalc = scf.UHF(mol)
+
+    hfcalc.chkfile = dopts['checkfile']
+    hfcalc.max_cycle = dopts['max_cycle']
+    hfcalc.conv_tol = dopts['tol']
+
+    if 'levelshift' in dopts:
+        hfcalc.level_shift = dopts['levelshift']
+
+    e0 = hfcalc.kernel()
+
+    odict = {
+        'Etot': hfcalc.e_tot, 'Converged': hfcalc.converged,
+    }
+    fname = './pyscf_run.yaml'
+    with open(fname,'w+') as tfl:
+        for akey in odict:
+            tfl.write('{:}: {:}\n'.format(akey,odict[akey]))
+
+    np.save('./orbital_eigenvalues.npy',hfcalc.mo_energy)
+    np.save('./orbital_occupancies.npy',hfcalc.mo_occ)
+    np.save('./orbital_coefficients.npy',hfcalc.mo_coeff)
+
+    return e0
+
+if __name__ == "__main__":
+
+    #print(parse_inp('./sample.txt'))
+    molscf()
+#INFO: ******************** input file end ********************
+
+
+System: uname_result(system='Linux', node='e066', release='3.10.0-1160.25.1.el7.x86_64', version='#1 SMP Wed Apr 28 21:49:45 UTC 2021', machine='x86_64')  Threads 20
+Python 3.9.4 (default, Jun 10 2021, 14:03:49) 
+[GCC 4.8.5 20150623 (Red Hat 4.8.5-44)]
+numpy 1.22.2  scipy 1.8.0
+Date: Mon May  9 14:12:07 2022
+PySCF version 2.0.1
+PySCF path  /home/tuf53878/.local/lib/python3.9/site-packages/pyscf
+
+[CONFIG] conf_file None
+[INPUT] verbose = 4
+[INPUT] num. atoms = 1
+[INPUT] num. electrons = 8
+[INPUT] charge = 0
+[INPUT] spin (= nelec alpha-beta = 2S) = 2
+[INPUT] symmetry False subgroup None
+[INPUT] Mole.unit = angstrom
+[INPUT]  1 O      0.000000000000   0.000000000000   0.000000000000 AA    0.000000000000   0.000000000000   0.000000000000 Bohr
+
+nuclear repulsion = 0
+number of shells = 19
+number of NR pGTOs = 93
+number of NR cGTOs = 80
+basis = aug-cc-pvqz
+ecp = {}
+CPU time:         2.35
+
+
+******** <class 'pyscf.scf.uhf.UHF'> ********
+method = UHF
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+SCF conv_tol = 1e-07
+SCF conv_tol_grad = None
+SCF max_cycles = 500
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = ../HF_WVFN/O_wvfn
+max_memory 4000 MB (current use 59 MB)
+number electrons alpha = 5  beta = 3
+Set gradient conv threshold to 0.000316228
+init E= -74.2867577838759
+  alpha nocc = 5  HOMO = -0.39086256616996  LUMO = 0.139038987179251
+
+WARN: beta  nocc = 3  HOMO -0.390862566169963 >= LUMO -0.39086256616996
+
+
+WARN: system HOMO -0.39086256616996 >= system LUMO -0.39086256616996
+
+cycle= 1 E= -74.7868188027836  delta_E= -0.5  |g|= 0.245  |ddm|= 0.488
+  alpha nocc = 5  HOMO = -0.679988118973012  LUMO = 0.126372698541028
+  beta  nocc = 3  HOMO = -0.60267823712348  LUMO = 0.0136305058944997
+cycle= 2 E= -74.8139546996642  delta_E= -0.0271  |g|= 0.0969  |ddm|= 0.132
+  alpha nocc = 5  HOMO = -0.600423578154273  LUMO = 0.132753021311733
+  beta  nocc = 3  HOMO = -0.524130736239354  LUMO = 0.0649236910396989
+cycle= 3 E= -74.8169933473424  delta_E= -0.00304  |g|= 0.0258  |ddm|= 0.0528
+  alpha nocc = 5  HOMO = -0.607691604113566  LUMO = 0.132567466321828
+  beta  nocc = 3  HOMO = -0.527470482233048  LUMO = 0.0630804304550194
+cycle= 4 E= -74.8175324283923  delta_E= -0.000539  |g|= 0.00848  |ddm|= 0.0219
+  alpha nocc = 5  HOMO = -0.610337278336235  LUMO = 0.132254848902564
+  beta  nocc = 3  HOMO = -0.524012537085381  LUMO = 0.0624019910864866
+cycle= 5 E= -74.817619134915  delta_E= -8.67e-05  |g|= 0.00203  |ddm|= 0.0108
+  alpha nocc = 5  HOMO = -0.611295896705749  LUMO = 0.132280683834919
+  beta  nocc = 3  HOMO = -0.521928067842238  LUMO = 0.0624849448604568
+cycle= 6 E= -74.8176248774004  delta_E= -5.74e-06  |g|= 0.000358  |ddm|= 0.00294
+  alpha nocc = 5  HOMO = -0.611645277273612  LUMO = 0.13227481792494
+  beta  nocc = 3  HOMO = -0.521735360461065  LUMO = 0.0624592308994726
+cycle= 7 E= -74.8176250551777  delta_E= -1.78e-07  |g|= 5.95e-05  |ddm|= 0.000491
+  alpha nocc = 5  HOMO = -0.611665730447441  LUMO = 0.132278679463674
+  beta  nocc = 3  HOMO = -0.521723966306511  LUMO = 0.0624685614140276
+cycle= 8 E= -74.8176250582718  delta_E= -3.09e-09  |g|= 7.45e-06  |ddm|= 6.02e-05
+  alpha nocc = 5  HOMO = -0.611668538116078  LUMO = 0.132278537079164
+  beta  nocc = 3  HOMO = -0.52172733344054  LUMO = 0.0624673351537796
+Extra cycle  E= -74.8176250583122  delta_E= -4.04e-11  |g|= 2.37e-06  |ddm|= 5.97e-06
+converged SCF energy = -74.8176250583122  <S^2> = 2.0093594  2S+1 = 3.0062331

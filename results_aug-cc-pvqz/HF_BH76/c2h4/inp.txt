@@ -1,0 +1,11 @@
+symm = False
+tol = 1e-07
+max_cycle = 500
+verbose = 4
+charge = 0
+2S = 0
+restricted = True
+xyz_fl = ./struc.xyz
+basis = aug-cc-pvqz
+logfile = c2h4.txt
+checkfile = ../HF_WVFN/c2h4_wvfn

@@ -1,0 +1,344 @@
+C2H5:
+  2S: 1
+  Charge: 0
+  R: false
+C2H6:
+  2S: 0
+  Charge: 0
+  R: true
+C5H8:
+  2S: 0
+  Charge: 0
+  R: true
+CH2OH:
+  2S: 1
+  Charge: 0
+  R: false
+CH4:
+  2S: 0
+  Charge: 0
+  R: true
+H2:
+  2S: 0
+  Charge: 0
+  R: true
+H2O:
+  2S: 0
+  Charge: 0
+  R: true
+H2S:
+  2S: 0
+  Charge: 0
+  R: true
+HS:
+  2S: 1
+  Charge: 0
+  R: false
+N2H:
+  2S: 1
+  Charge: 0
+  R: false
+N2H2:
+  2S: 0
+  Charge: 0
+  R: true
+NH:
+  2S: 2
+  Charge: 0
+  R: false
+NH2:
+  2S: 1
+  Charge: 0
+  R: false
+NH3:
+  2S: 0
+  Charge: 0
+  R: true
+O:
+  2S: 2
+  Charge: 0
+  R: false
+PH2:
+  2S: 1
+  Charge: 0
+  R: false
+PH3:
+  2S: 0
+  Charge: 0
+  R: true
+RKT01:
+  2S: 1
+  Charge: 0
+  R: false
+RKT02:
+  2S: 1
+  Charge: 0
+  R: false
+RKT03:
+  2S: 1
+  Charge: 0
+  R: false
+RKT04:
+  2S: 1
+  Charge: 0
+  R: false
+RKT05:
+  2S: 1
+  Charge: 0
+  R: false
+RKT06:
+  2S: 1
+  Charge: 0
+  R: false
+RKT07:
+  2S: 1
+  Charge: 0
+  R: false
+RKT08:
+  2S: 1
+  Charge: 0
+  R: false
+RKT09:
+  2S: 1
+  Charge: 0
+  R: false
+RKT10:
+  2S: 1
+  Charge: 0
+  R: false
+RKT11:
+  2S: 2
+  Charge: 0
+  R: false
+RKT12:
+  2S: 1
+  Charge: 0
+  R: false
+RKT13:
+  2S: 1
+  Charge: 0
+  R: false
+RKT14:
+  2S: 2
+  Charge: 0
+  R: false
+RKT15:
+  2S: 1
+  Charge: 0
+  R: false
+RKT16:
+  2S: 1
+  Charge: 0
+  R: false
+RKT17:
+  2S: 2
+  Charge: 0
+  R: false
+RKT18:
+  2S: 2
+  Charge: 0
+  R: false
+RKT19:
+  2S: 2
+  Charge: 0
+  R: false
+RKT20:
+  2S: 1
+  Charge: 0
+  R: false
+RKT21:
+  2S: 1
+  Charge: 0
+  R: false
+RKT22:
+  2S: 0
+  Charge: 0
+  R: true
+c2h4:
+  2S: 0
+  Charge: 0
+  R: true
+c2h5_34:
+  2S: 1
+  Charge: 0
+  R: false
+c2h5ts:
+  2S: 1
+  Charge: 0
+  R: false
+c3h7:
+  2S: 1
+  Charge: 0
+  R: false
+c3h7ts:
+  2S: 1
+  Charge: 0
+  R: false
+ch3:
+  2S: 1
+  Charge: 0
+  R: false
+ch3cl:
+  2S: 0
+  Charge: 0
+  R: true
+ch3f:
+  2S: 0
+  Charge: 0
+  R: true
+ch3fclts:
+  2S: 1
+  Charge: 0
+  R: false
+ch3oh:
+  2S: 0
+  Charge: 0
+  R: true
+cl:
+  2S: 1
+  Charge: 0
+  R: false
+cl-:
+  2S: 0
+  Charge: -1
+  R: true
+clch3clcomp:
+  2S: 0
+  Charge: -1
+  R: true
+clch3clts:
+  2S: 0
+  Charge: -1
+  R: true
+clf:
+  2S: 0
+  Charge: 0
+  R: true
+co:
+  2S: 0
+  Charge: 0
+  R: true
+f:
+  2S: 1
+  Charge: 0
+  R: false
+f-:
+  2S: 0
+  Charge: -1
+  R: true
+f2:
+  2S: 0
+  Charge: 0
+  R: true
+fch3clcomp1:
+  2S: 0
+  Charge: -1
+  R: true
+fch3clcomp2:
+  2S: 0
+  Charge: -1
+  R: true
+fch3clts:
+  2S: 0
+  Charge: -1
+  R: true
+fch3fcomp:
+  2S: 0
+  Charge: -1
+  R: true
+fch3fts:
+  2S: 0
+  Charge: -1
+  R: true
+h:
+  2S: 1
+  Charge: 0
+  R: false
+hch3clts:
+  2S: 1
+  Charge: 0
+  R: false
+hcl:
+  2S: 0
+  Charge: 0
+  R: true
+hclhts:
+  2S: 1
+  Charge: 0
+  R: false
+hcn:
+  2S: 0
+  Charge: 0
+  R: true
+hcnts:
+  2S: 0
+  Charge: 0
+  R: true
+hco:
+  2S: 1
+  Charge: 0
+  R: false
+hcots:
+  2S: 1
+  Charge: 0
+  R: false
+hf:
+  2S: 0
+  Charge: 0
+  R: true
+hf2ts:
+  2S: 1
+  Charge: 0
+  R: false
+hfch3ts:
+  2S: 1
+  Charge: 0
+  R: false
+hfhts:
+  2S: 1
+  Charge: 0
+  R: false
+hn2:
+  2S: 1
+  Charge: 0
+  R: false
+hn2ts:
+  2S: 1
+  Charge: 0
+  R: false
+hnc:
+  2S: 0
+  Charge: 0
+  R: true
+hoch3fcomp1:
+  2S: 0
+  Charge: -1
+  R: true
+hoch3fcomp2:
+  2S: 0
+  Charge: -1
+  R: true
+hoch3fts:
+  2S: 0
+  Charge: -1
+  R: true
+n2:
+  2S: 0
+  Charge: 0
+  R: true
+n2o:
+  2S: 0
+  Charge: 0
+  R: true
+n2ohts:
+  2S: 1
+  Charge: 0
+  R: false
+oh:
+  2S: 1
+  Charge: 0
+  R: false
+oh-:
+  2S: 0
+  Charge: -1
+  R: true

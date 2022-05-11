@@ -1,0 +1,13 @@
+gridsize = 9
+symm = False
+tol = 1e-07
+max_cycle = 500
+verbose = 4
+charge = -1
+2S = 0
+restricted = True
+xc = MGGA_X_SCAN, MGGA_C_SCAN
+xc_lib = LibXC
+xyz_fl = ./struc.xyz
+basis = aug-cc-pvqz
+logfile = hoch3fcomp1.txt

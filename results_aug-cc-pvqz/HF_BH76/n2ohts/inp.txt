@@ -1,0 +1,11 @@
+symm = False
+tol = 1e-07
+max_cycle = 500
+verbose = 4
+charge = 0
+2S = 1
+restricted = False
+xyz_fl = ./struc.xyz
+basis = aug-cc-pvqz
+logfile = n2ohts.txt
+checkfile = ../HF_WVFN/n2ohts_wvfn

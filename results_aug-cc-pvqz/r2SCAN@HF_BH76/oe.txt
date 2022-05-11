@@ -1,0 +1,113 @@
+----------------------------------------
+Begin Batch Job Prologue Tue May 10 09:30:34 EDT 2022
+Job ID:           444486
+Username:         tuf53878
+Group:            perdew
+Job Name:         BH76
+Resources List:   walltime=24:00:00,nodes=1:ppn=20,neednodes=1:ppn=20
+Queue:            normal
+Account:          
+Nodes:            e071 
+----------------------------------------
+End Batch Job Prologue Tue May 10 09:30:38 EDT 2022
+----------------------------------------
+output file: C2H5.txt
+output file: C2H6.txt
+output file: C5H8.txt
+output file: CH2OH.txt
+output file: CH4.txt
+output file: H2.txt
+output file: H2O.txt
+output file: H2S.txt
+output file: HS.txt
+output file: N2H.txt
+output file: N2H2.txt
+output file: NH.txt
+output file: NH2.txt
+output file: NH3.txt
+output file: O.txt
+output file: PH2.txt
+output file: PH3.txt
+output file: RKT01.txt
+output file: RKT02.txt
+output file: RKT03.txt
+output file: RKT04.txt
+output file: RKT05.txt
+output file: RKT06.txt
+output file: RKT07.txt
+output file: RKT08.txt
+output file: RKT09.txt
+output file: RKT10.txt
+output file: RKT11.txt
+output file: RKT12.txt
+output file: RKT13.txt
+output file: RKT14.txt
+output file: RKT15.txt
+output file: RKT16.txt
+output file: RKT17.txt
+output file: RKT18.txt
+output file: RKT19.txt
+output file: RKT20.txt
+output file: RKT21.txt
+output file: RKT22.txt
+output file: c2h4.txt
+output file: c2h5_34.txt
+output file: c2h5ts.txt
+output file: c3h7.txt
+output file: c3h7ts.txt
+output file: ch3.txt
+output file: ch3cl.txt
+output file: ch3f.txt
+output file: ch3fclts.txt
+output file: ch3oh.txt
+output file: cl-.txt
+output file: cl.txt
+output file: clch3clcomp.txt
+output file: clch3clts.txt
+output file: clf.txt
+output file: co.txt
+output file: f-.txt
+output file: f.txt
+output file: f2.txt
+output file: fch3clcomp1.txt
+output file: fch3clcomp2.txt
+output file: fch3clts.txt
+output file: fch3fcomp.txt
+output file: fch3fts.txt
+output file: h.txt
+output file: hch3clts.txt
+output file: hcl.txt
+output file: hclhts.txt
+output file: hcn.txt
+output file: hcnts.txt
+output file: hco.txt
+output file: hcots.txt
+output file: hf.txt
+output file: hf2ts.txt
+output file: hfch3ts.txt
+output file: hfhts.txt
+output file: hn2.txt
+output file: hn2ts.txt
+output file: hnc.txt
+output file: hoch3fcomp1.txt
+output file: hoch3fcomp2.txt
+output file: hoch3fts.txt
+output file: n2.txt
+output file: n2o.txt
+output file: n2ohts.txt
+output file: oh-.txt
+output file: oh.txt
+----------------------------------------
+Begin Batch Job Epilogue Tue May 10 10:06:34 EDT 2022
+Job ID:           444486
+Username:         tuf53878
+Group:            perdew
+Job Name:         BH76
+Session:          29622
+Limits:           walltime=24:00:00,nodes=1:ppn=20,neednodes=1:ppn=20
+Resources:        cput=11:32:37,vmem=7307536kb,walltime=00:36:00,mem=3855292kb,energy_used=0
+Queue:            normal
+Account:          
+----------------------------------------
+End Batch Job Epilogue Tue May 10 10:06:58 EDT 2022
+----------------------------------------
