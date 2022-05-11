@@ -1,2 +1,4 @@
 **/.DS_Store
 ./FLOSIC/vtest.py
+**/__pycache__
+**/*.tar

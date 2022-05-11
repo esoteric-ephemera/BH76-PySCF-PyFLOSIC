@@ -5,7 +5,24 @@ from os import listdir,path,system,sys
 base_dir = './'
 hf_wvfn_dir = './HF_WVFN_aug-cc-pvqz'
 
-xclib = 'LibXC'
+"""
+setup.py usage:
+    python3 setup.py dfa=dfa_str clean=t/f
+
+    dfa_str should either be a keyword in dict libxc_key (see below), or a
+        LibXC format string, like GGA_X_PW91, MGGA_C_RSCAN
+        This is the density functional approximation you want to use
+        Defaults to None if not specified
+
+    clean = boolean, only first character matters (t=True, f=False)
+        Defaults to True
+
+    xclib = LibXC or XCFun, sets library used to get XC DFA
+
+    examples : python3 setup.py dfa=LSDA clean=t
+            python3 setup.py dfa=GGA_X_PW91,GGA_C_PW91 xclib=LibXC
+            python3 setup.py dfa=PW91X,PW91C xclib=XCFun
+"""
 
 xcfun_key = {
     'LSDA': '1.0*SLATERX, 1.0*PW92C', 'PBE': '1.0*PBEX, 1.0*PBEC',
@@ -59,7 +76,7 @@ def get_ats_from_xyz(flnm):
     return atd
 
 
-def setup(dfa,startclean=True):
+def setup(dfa,startclean=True,xclib='LibXC'):
 
     cmdict = yaml.load(open(base_dir+'BH76_chg_2s.yaml','r'), Loader=yaml.Loader)
 
@@ -120,14 +137,18 @@ def setup(dfa,startclean=True):
             optstr += 'restricted = False\n'
 
         if dfa != 'HF':
+            xcstr = dfa
             if xclib == 'XCFun':
-                optstr += 'xc = {:}\n'.format(xcfun_key[dfa])
-                optstr += 'xc_lib = XCFun\n'
+                if dfa in xcfun_key:
+                    xcstr = xcfun_key[dfa]
             elif xclib == 'LibXC':
-                optstr += 'xc = {:}\n'.format(libxc_key[dfa])
-                optstr += 'xc_lib = LibXC\n'
+                if dfa in libxc_key:
+                    xcstr = libxc_key[dfa]
             else:
                 raise SystemExit('Unknown XC library '+xclib)
+
+            optstr += 'xc = {:}\n'.format(xcstr)
+            optstr += 'xc_lib = {:}\n'.format(xclib)
 
         if asys in lshiftd:
             optstr += 'levelshift = {:}\n'.format(lshiftd[asys])
@@ -190,6 +211,36 @@ def setup(dfa,startclean=True):
 
     return
 
+def parse_into_setup():
+
+    dfa = None
+    makeclean = True
+    xclib = 'LibXC'
+
+    if len(sys.argv) < 2:
+        raise SystemExit('Need to specify density functional!')
+    else:
+        for astr in sys.argv[1:]:
+            key,val = astr.split('=')
+            if key.lower() == 'dfa':
+                dfa = val
+            elif key.lower() == 'clean':
+                if val.lower()[0] == 't':
+                    makeclean = True
+                elif val.lower()[0] == 'f':
+                    makeclean = False
+                else:
+                    print('Keyword "clean" must be t/f!')
+            elif key.lower() == 'lib':
+                xclib = val
+            else:
+                print('Skipping unknown keyword {:}'.format(key))
+
+    setup(dfa,startclean=makeclean,xclib=xclib)
+
+    return
+
 if __name__ == "__main__":
 
-    setup('LSDA@HF',startclean=True)
+    #setup('LSDA@HF',startclean=True)
+    parse_into_setup()
