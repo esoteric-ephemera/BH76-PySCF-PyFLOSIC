@@ -1,5 +1,6 @@
 import numpy as np
 import ase.io as aio
+from ase.units import Bohr
 from nrlmol_basis import get_dfo_basis
 from pycom import pycom_guess
 from ase_pyflosic_optimizer import flosic_optimize
@@ -83,8 +84,8 @@ def xyz_to_FRMORB(flnm,outfl='FRMORB'):
     [geo,nuclei,fod1,fod2,included] = xyz_to_nuclei_fod(aio.read(flnm))
     N_up = len(fod1)
     N_dn = len(fod2)
-    fod_up = fod1.positions
-    fod_dn = fod2.positions
+    fod_up = fod1.positions/Bohr
+    fod_dn = fod2.positions/Bohr
 
     with open(outfl,'w+') as tfl:
         tfl.write('  {:} {:}\n'.format(N_up,N_dn))

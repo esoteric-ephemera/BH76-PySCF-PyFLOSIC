@@ -6,7 +6,7 @@ setup.py usage:
     python3 setup.py dfa=dfa_str clean=t/f
 
     dfa_str should either be a keyword in dict libxc_key (see below), or a
-        LibXC format string, like GGA_X_PW91, MGGA_C_RSCAN
+        LibXC format string, like GGA_X_PW91,MGGA_C_RSCAN
         This is the density functional approximation you want to use
         Defaults to None if not specified
 

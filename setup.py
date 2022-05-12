@@ -10,7 +10,7 @@ setup.py usage:
     python3 setup.py dfa=dfa_str clean=t/f
 
     dfa_str should either be a keyword in dict libxc_key (see below), or a
-        LibXC format string, like GGA_X_PW91, MGGA_C_RSCAN
+        LibXC format string, like GGA_X_PW91,MGGA_C_RSCAN
         This is the density functional approximation you want to use
         Defaults to None if not specified
 
@@ -18,6 +18,7 @@ setup.py usage:
         Defaults to True
 
     xclib = LibXC or XCFun, sets library used to get XC DFA
+        Defaults to LibXC
 
     examples : python3 setup.py dfa=LSDA clean=t
             python3 setup.py dfa=GGA_X_PW91,GGA_C_PW91 xclib=LibXC
@@ -231,7 +232,7 @@ def parse_into_setup():
                     makeclean = False
                 else:
                     print('Keyword "clean" must be t/f!')
-            elif key.lower() == 'lib':
+            elif key.lower() == 'xclib':
                 xclib = val
             else:
                 print('Skipping unknown keyword {:}'.format(key))
