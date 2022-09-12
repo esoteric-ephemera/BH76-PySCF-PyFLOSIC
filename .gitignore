@@ -7,3 +7,7 @@
 HF_WVFN_aug-cc-pvqz/
 LCwPBE_WVFN_aug-cc-pvqz/
 BH6_B3LYP
+opt_hf_dft.py
+ds_cutoff.pdf
+plot_bh76_mads_for_poster.py
+run_single_point_hf.py
