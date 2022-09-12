@@ -1,0 +1,10 @@
+! PBE
+! def2-qzvp
+*xyzfile  0  1
+%scf
+MaxIter  500
+end
+! 0
+! 1
+! StrongSCF
+! defgrid2

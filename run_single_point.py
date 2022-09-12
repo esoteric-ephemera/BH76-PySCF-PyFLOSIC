@@ -1,12 +1,53 @@
 import numpy as np
 from pyscf import gto,dft
+from os import path
 
 opt_type = {
     'float': ['tol','levelshift'],
     'int': ['gridsize','max_cycle','charge','2S','verbose'],
-    'bool': ['symm','restricted'],
+    'bool': ['symm','restricted','write_chkfl','cartesian'],
     'str': ['xyz_fl','basis','xc','xc_lib','ecp','logfile','init','chkfl']
 }
+
+def get_ats_from_xyz(flnm):
+
+    atd = {}
+    with open(flnm,'r') as tfl:
+
+        for iln,aln in enumerate(tfl):
+            tmp = [x.strip() for x in aln.split()]
+            if iln == 0:
+                nion = int(aln.strip())
+            elif 1 < iln < nion + 2:
+                tmp = aln.strip().split()
+                elt = tmp[0].strip()
+                if len(elt) == 1:
+                    elt = elt.upper()
+                elif len(elt) == 2:
+                    elt = elt[0].upper()+elt[1].lower()
+                else:
+                    print('Something is up, element name {:} too long or short'.format(elt))
+                    raise SystemExit()
+                if elt in atd:
+                    atd[elt] += 1
+                else:
+                    atd[elt] = 1
+    return atd
+
+def get_nrlmol_bas(xyz_file,var='dfo'):
+
+    if var.lower() in ['nrlmol','dfo']:
+        wfl = path.dirname(path.realpath(__file__))+'/dfo-nrlmol.dat'
+    elif var.lower() in ['nrlmol+','dfo+']:
+        wfl = path.dirname(path.realpath(__file__))+'/dfo+-nrlmol.dat'
+    else:
+        raise ValueError('Unknown basis set {:}; stopping.'.format(var))
+
+    atd = get_ats_from_xyz(xyz_file)
+    basd = {}
+    for at in atd:
+        basd[at] = gto.load(wfl,symb=at)
+    return basd
 
 def str_parse(key,val):
     if key in opt_type['str']:
@@ -55,7 +96,8 @@ def molscf():
         'gridsize': 5, 'basis': 'def2-QZVP', 'symm': False,
         'tol': 1.e-7, 'max_cycle': 500, 'charge': 0, '2S': 0,
         'xc': '1.0*SLATERX, 1.0*PW92C', 'xc_lib': 'XCFun', 'verbose': 4,
-        'restricted': False, 'ecp' : {}, 'init': None
+        'restricted': False, 'ecp' : {}, 'init': None, 'write_chkfl' : False,
+        'cartesian': False
         }
 
     uopts = parse_inp('./inp.txt')
@@ -63,14 +105,31 @@ def molscf():
     for akey in uopts:
         dopts[akey] = uopts[akey]
 
+    if dopts['basis'].lower() in ['nrlmol','dfo','nrlmol+','dfo+']:
+        # NRLMOL basis sets
+        dopts['basis'] = get_nrlmol_bas(dopts['xyz_fl'],var=dopts['basis'])
+
     mol = gto.M(atom=dopts['xyz_fl'], basis=dopts['basis'], symmetry=dopts['symm'], \
         charge=dopts['charge'], spin=dopts['2S'], output = dopts['logfile'], \
-        verbose = dopts['verbose'], ecp = dopts['ecp'])
+        verbose = dopts['verbose'], ecp = dopts['ecp'], cart = dopts['cartesian'])
 
-    if dopts['restricted']:
-        kscalc = dft.RKS(mol)
+    if dopts['xc'] == 'HF':
+        from pyscf import scf
+        if dopts['restricted']:
+            kscalc = scf.RHF(mol)
+        else:
+            kscalc = scf.UHF(mol)
     else:
-        kscalc = dft.UKS(mol)
+        if dopts['restricted']:
+            kscalc = dft.RKS(mol)
+        else:
+            kscalc = dft.UKS(mol)
+
+    if dopts['write_chkfl']:
+        if 'chkfl' in dopts:
+            kscalc.chkfile = dopts['chkfl']
+        else:
+            kscalc.chkfile = './WVFNS'
 
     if dopts['init'] == 'chkfl':
         kscalc.chkfile = dopts['chkfl']
@@ -91,13 +150,16 @@ def molscf():
 
     kscalc.max_cycle = dopts['max_cycle']
     kscalc.conv_tol = dopts['tol']
-    kscalc.grids.level = dopts['gridsize']
 
-    if dopts['xc_lib'] == 'XCFun':
-        kscalc._numint.libxc = dft.xcfun
-    elif dopts['xc_lib'] != 'LibXC':
-        raise SystemExit('Unknown XC library '+ dopts['xc_lib'])
-    kscalc.xc = dopts['xc']
+    if dopts['xc'] != 'HF':
+
+        kscalc.grids.level = dopts['gridsize']
+
+        if dopts['xc_lib'] == 'XCFun':
+            kscalc._numint.libxc = dft.xcfun
+        elif dopts['xc_lib'] != 'LibXC':
+            raise SystemExit('Unknown XC library '+ dopts['xc_lib'])
+        kscalc.xc = dopts['xc']
 
     if 'levelshift' in dopts:
         kscalc.level_shift = dopts['levelshift']

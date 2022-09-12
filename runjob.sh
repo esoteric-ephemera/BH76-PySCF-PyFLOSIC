@@ -10,11 +10,13 @@
 module --force purge ; module load intel-libs ; module load python/3.9.4
 cd "$PBS_O_WORKDIR"
 
-export OMP_NUM_THREADS=6
+pyexec=/home/tuf53878/BH76/run_single_point.py
+
+export OMP_NUM_THREADS=20
 #export MKL_NUM_THREADS=20
 #export OPENBLAS_NUM_THREADS=20
 for u in ./*/ ; do
   cd $u
-  python3 run_single_point.py
+  python3 $pyexec
   cd ..
 done

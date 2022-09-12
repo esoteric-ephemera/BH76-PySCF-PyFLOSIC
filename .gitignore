@@ -3,3 +3,6 @@
 **/__pycache__
 **/*.tar
 ./FLOSIC/*_BH76_FODs
+**/results_*/
+HF_WVFN_aug-cc-pvqz/
+LCwPBE_WVFN_aug-cc-pvqz/

@@ -1,15 +1,15 @@
 import yaml
-
 from os import listdir,path,system,sys
 
-base_dir = './'
-hf_wvfn_dir = './HF_WVFN_aug-cc-pvqz'
+from run_single_point import opt_type,str_parse,get_ats_from_xyz
+
+base_dir = path.dirname(path.realpath(__file__)) + '/'
 
 """
 setup.py usage:
-    python3 setup.py dfa=dfa_str clean=t/f
+    python3 setup.py dfa=str clean=t/f at_dfa=str dfa_dir=str
 
-    dfa_str should either be a keyword in dict libxc_key (see below), or a
+    dfa should either be a keyword in dict libxc_key (see below), or a
         LibXC format string, like GGA_X_PW91,MGGA_C_RSCAN
         This is the density functional approximation you want to use
         Defaults to None if not specified
@@ -19,6 +19,12 @@ setup.py usage:
 
     xclib = LibXC or XCFun, sets library used to get XC DFA
         Defaults to LibXC
+
+    at_dfa should be a directory name where wavefunction files are written to
+        Used to do dfa@at_dfta calculations
+
+    dfa_dir should be the name of the DFA directory if you don't want to use dfa as its name
+        Defaults to be same as dfa
 
     examples : python3 setup.py dfa=LSDA clean=t
             python3 setup.py dfa=GGA_X_PW91,GGA_C_PW91 xclib=LibXC
@@ -35,7 +41,11 @@ libxc_key = {
     'LSDA': 'LDA_X, LDA_C_PW', 'PBE': 'GGA_X_PBE, GGA_C_PBE',
     'r2SCAN': 'MGGA_X_R2SCAN, MGGA_C_R2SCAN',
     'SCAN': 'MGGA_X_SCAN, MGGA_C_SCAN',
-    'BLYP': 'GGA_X_B88, GGA_C_LYP'
+    'BLYP': 'GGA_X_B88, GGA_C_LYP',
+    'B3LYP': 'HYB_GGA_XC_B3LYP',
+    'LCwPBE': 'HYB_GGA_XC_LC_WPBE',
+    'M06-L': 'MGGA_X_M06_L, MGGA_C_M06_L',
+    'MN15-L': 'MGGA_X_MN15_L, MGGA_C_MN15_L',
 }
 
 # add eigenvalue level shifts here if you need them to stabilize convergence
@@ -45,43 +55,21 @@ z_d = dict( H = 1, He = 2,
 Li = 3, Be = 4, B = 5, C = 6, N = 7, O = 8, F = 9, Ne = 10,
 Na = 11, Mg = 12, Al = 13, Si = 14, P = 15, S = 16, Cl = 17, Ar = 18,
 K = 19, Ca = 20, Sc = 21, Ti  = 22, V = 23, Cr = 24, Mn = 25, Fe = 26, Co = 27,
-    Ni = 28, Cu = 29, Zn = 30, Ga = 31, Ge = 32, As = 33, Se = 34, Br = 25, Kr = 36,
+Ni = 28, Cu = 29, Zn = 30, Ga = 31, Ge = 32, As = 33, Se = 34, Br = 25, Kr = 36,
 Rb = 37, Sr = 38, Y = 39, Zr = 40, Nb = 41, Mo = 42, Tc = 43, Ru = 44, Rh = 45,
-    Pd = 46, Ag = 47, Cd = 48, In = 49, Sn = 50, Sb = 51, Te = 52, I = 53, Xe = 54,
+Pd = 46, Ag = 47, Cd = 48, In = 49, Sn = 50, Sb = 51, Te = 52, I = 53, Xe = 54,
 Pb = 82, Bi = 83 # I can't add all of them...
 )
 
-def get_ats_from_xyz(flnm):
 
-    atd = {}
-    with open(flnm,'r') as tfl:
-
-        for iln,aln in enumerate(tfl):
-            tmp = [x.strip() for x in aln.split()]
-            if iln == 0:
-                nion = int(aln.strip())
-            elif 1 < iln < nion + 2:
-                tmp = aln.strip().split()
-                elt = tmp[0].strip()
-                if len(elt) == 1:
-                    elt = elt.upper()
-                elif len(elt) == 2:
-                    elt = elt[0].upper()+elt[1].lower()
-                else:
-                    print('Something is up, element name {:} too long or short'.format(elt))
-                    raise SystemExit()
-                if elt in atd:
-                    atd[elt] += 1
-                else:
-                    atd[elt] = 1
-    return atd
-
-
-def setup(dfa,startclean=True,xclib='LibXC'):
+def setup(dfa,startclean=True,xclib='LibXC',wfdir = '',dfa_dir=None,inp_opts={}):
 
     cmdict = yaml.load(open(base_dir+'BH76_chg_2s.yaml','r'), Loader=yaml.Loader)
 
-    wdir = base_dir + '{:}_BH76/'.format(dfa)
+    if dfa_dir is not None:
+        wdir = base_dir + '{:}_BH76/'.format(dfa_dir)
+    else:
+        wdir = base_dir + '{:}_BH76/'.format(dfa)
 
     if startclean and path.isdir(wdir):
         system('rm -rf '+ wdir)
@@ -89,8 +77,10 @@ def setup(dfa,startclean=True,xclib='LibXC'):
     # specific options used universally
     univ_opts = {
         'gridsize': 9, 'symm': False, 'tol': 1.e-7, 'max_cycle': 500,
-        'verbose': 4
+        'verbose': 4, 'basis': 'aug-cc-pvqz'
     }
+    for akey in inp_opts:
+        univ_opts[akey] = inp_opts[akey]
 
     srcdir = base_dir + 'BH76_geometries/'
     system('cp -r {:} {:}'.format(srcdir,wdir))
@@ -98,33 +88,34 @@ def setup(dfa,startclean=True,xclib='LibXC'):
     if dfa == 'HF':
         system('mkdir {:}HF_WVFN'.format(wdir))
 
-    hfdft = False
-    if dfa[-3:] == '@HF':
-        dfa = dfa[:-3]
+    nscf_dft = False
+    if '@' in dfa:
+        nscf_dft = True
+        dfa,at_dfa = dfa.split('@')
         univ_opts['max_cycle'] = 0
-        hfdft = True
-        if path.isdir(hf_wvfn_dir) and len(listdir(hf_wvfn_dir)) > 0:
+        if path.isdir(wfdir) and len(listdir(wfdir)) > 0:
             for asys in cmdict:
-                if asys == 'h':
+                if asys == 'h' and at_dfa == 'HF':
                     # we use reduced density matrix for h, PySCF won't store the
-                    # wavefunction file here. Dunno why
+                    # HF wavefunction file here. Dunno why
                     continue
-                cstr = 'cp ./{:}/{:}_wvfn {:}{:}/wvfn'.format(hf_wvfn_dir,asys,\
-                    wdir,asys)
+                cstr = 'cp {:}{:}/{:}_wvfn {:}{:}/wvfn'.format(base_dir,wfdir,\
+                    asys,wdir,asys)
                 system(cstr)
         else:
-            raise SystemExit("I can't do DFA@HF without Hartree-Fock orbitals!")
+            err_str = "I can't do {:}@{:} without {:} orbitals!".format(dfa,at_dfa,at_dfa)
+            raise SystemExit(err_str)
 
     for asys in listdir(srcdir):
         if asys[0] == '.':
             continue
 
         cdir = wdir + '/' + asys + '/'
-        if dfa == 'HF':
-            system('cp run_single_point_hf.py '+ cdir + 'run_single_point.py')
-            univ_opts.pop('gridsize',None)
-        else:
-            system('cp run_single_point.py '+ cdir)
+        #if dfa == 'HF':
+        #    system('cp run_single_point_hf.py '+ cdir + 'run_single_point.py')
+        #    univ_opts.pop('gridsize',None)
+        #else:
+        #    system('cp run_single_point.py '+ cdir)
 
         optstr = ''
         for akey in univ_opts:
@@ -137,7 +128,9 @@ def setup(dfa,startclean=True,xclib='LibXC'):
         else:
             optstr += 'restricted = False\n'
 
-        if dfa != 'HF':
+        if dfa == 'HF':
+            optstr += 'xc = HF\n'
+        else:
             xcstr = dfa
             if xclib == 'XCFun':
                 if dfa in xcfun_key:
@@ -169,8 +162,8 @@ def setup(dfa,startclean=True,xclib='LibXC'):
                 basis = H : STO-3G ; O : cc-pVDZ
             spaces are ignored, use enough to be readable
         """
-        basstr = 'aug-cc-pvqz'#'def2-QZVP'
-        optstr += 'basis = {:}\n'.format(basstr)
+        #basstr = 'aug-cc-pvqz'#'def2-QZVP'
+        #optstr += 'basis = {:}\n'.format(basis)
 
         """
             For heavy atoms, an electronic core potential (ECP)/pseudopotential is
@@ -197,10 +190,11 @@ def setup(dfa,startclean=True,xclib='LibXC'):
 
         optstr += 'logfile = ' + asys + '.txt\n'
         if dfa == 'HF':
-            optstr += 'checkfile = ../HF_WVFN/{:}_wvfn\n'.format(asys)
+            optstr += 'write_chkfl = True\n'
+            optstr += 'chkfl = ../HF_WVFN/{:}_wvfn\n'.format(asys)
 
-        if hfdft:
-            if asys == 'h':
+        if nscf_dft:
+            if asys == 'h' and at_dfa == 'HF':
                 optstr += 'init = HF DM\n'
             else:
                 optstr += 'init = chkfl\n'
@@ -217,27 +211,43 @@ def parse_into_setup():
     dfa = None
     makeclean = True
     xclib = 'LibXC'
+    wfdir = ''
+    dfa_dir = None
+
+    ioptd = {}
+    ioptl = []
+    for akey in opt_type:
+        for bkey in opt_type[akey]:
+            ioptl.append(bkey)
 
     if len(sys.argv) < 2:
         raise SystemExit('Need to specify density functional!')
     else:
         for astr in sys.argv[1:]:
             key,val = astr.split('=')
-            if key.lower() == 'dfa':
+            lkey = key.lower()
+            if lkey == 'dfa':
                 dfa = val
-            elif key.lower() == 'clean':
+            elif lkey == 'clean':
                 if val.lower()[0] == 't':
                     makeclean = True
                 elif val.lower()[0] == 'f':
                     makeclean = False
                 else:
                     print('Keyword "clean" must be t/f!')
-            elif key.lower() == 'xclib':
+            elif lkey == 'xclib':
                 xclib = val
+            elif lkey == 'at_dfa':
+                wfdir = val
+            elif lkey == 'dfa_dir':
+                dfa_dir = val
+            elif key in ioptl:
+                ioptd[key] = val
             else:
                 print('Skipping unknown keyword {:}'.format(key))
 
-    setup(dfa,startclean=makeclean,xclib=xclib)
+    setup(dfa,startclean=makeclean,xclib=xclib,wfdir=wfdir,dfa_dir=dfa_dir,\
+        inp_opts=ioptd)
 
     return
 
