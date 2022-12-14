@@ -18,7 +18,10 @@ def conversion():
                 wdict[dfas[i]][mol] = float(tmp[1+i])
 
     for dfa in dfas:
-        tdir = './FLOSIC/'+dfa+'_BH76/'
+        if '@' in dfa:
+            tdir = './FLOSIC/'+dfa.split('@')[0]+'/'+dfa+'_BH76/'
+        else:
+            tdir = './FLOSIC/'+dfa+'/'+dfa+'_BH76/'
         if not path.isdir(tdir):
             system('mkdir -p '+tdir)
         BH76_analysis(cdir=tdir,edict=wdict[dfa],wrc=True)

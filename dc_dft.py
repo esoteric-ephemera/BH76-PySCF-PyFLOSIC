@@ -17,6 +17,17 @@ rdir = path.dirname(path.realpath(__file__)) + '/'
 refs = yaml.load(open(rdir + 'BH76_ref_energies.yaml','r'), Loader=yaml.Loader)
 cmd = yaml.load(open(rdir + 'BH76_chg_2s.yaml','r'), Loader=yaml.Loader)
 
+def str_rep_rules(instr):
+    rules = {
+        'r2SCAN': '\\rrscan{}',
+        'LCwPBE': '\\lcwpbe{}',
+        'S50X': 'SX-0.5'
+    }
+    outstr = instr
+    for arule in rules:
+        outstr = outstr.replace(arule,rules[arule])
+    return outstr
+
 def get_wgts():
     rpf = {}
     rpb = {}
@@ -55,23 +66,23 @@ scf_dir = './results_aug-cc-pvqz/'
 nrlmol_basis_dir = './results_NRLMOL_cart/'
 refs = {
     #'SCAN@HF': './results_aug-cc-pvqz/',
-    'SCAN-FLOSIC': './FLOSIC/',
     'LCwPBE': './results_aug-cc-pvqz/',
-    'S50X': './scan_hybs/S50X/'
+    'S50X': './scan_hybs/S50X/',
+    'SCAN-FLOSIC': './FLOSIC/'
     #'S25X': './scan_hybs/S25X/',
 }
 Nref = len(refs.keys())
 
 refd = {}
 
-dfas = ['LSDA','PBE','BLYP','SCAN','r2SCAN','M06-L','MN15-L','B3LYP','LCwPBE','SCAN@HF']
+dfas = ['LSDA','PBE','BLYP','SCAN','r2SCAN','M06-L','MN15-L','B3LYP','LCwPBE','LSDA@HF','PBE@HF','SCAN@HF','r2SCAN@HF']
 metrics = ['MFE','MAFE','MDE','MADE']
 
 for aref in refs:
     if aref in ['S25X','S50X']:
         frac = aref[1:-1]
         tdir = refs[aref]+'SCAN_{:}_EXX_BH76/'.format(frac)
-    elif aref in ['SCAN@HF','SCAN-FLOSIC']:
+    elif aref in ['SCAN@HF']:
         tdir = refs[aref] + 'SCAN/' + aref +'_BH76/'
     else:
         tdir = refs[aref] + aref + '/' + aref +'_BH76/'
@@ -106,6 +117,16 @@ for dfa in dfas:
                 'TS': 0.0, 'RPF': 0.0, 'RPB': 0.0, 'BH': 0.0, 'RC': 0.0
             }
 
+    dsplit = dfa.split('@')
+    tdfa = dsplit[0]
+    if len(dsplit) > 1:
+        at_dfa = dsplit[1]
+
+    tdir = scf_dir+'{:}/{:}_BH76/'.format(tdfa,dfa)
+
+    tfl = tdir + 'BH76_total.yaml'
+    td_scf_default = BH76_analysis(cdir=tdir)
+
     for aref in refs:
 
         if dfa == aref:
@@ -115,39 +136,33 @@ for dfa in dfas:
 
         if aref == 'SCAN-FLOSIC':
 
-            if dfa == 'SCAN@HF':
-                tdir_scf = nrlmol_basis_dir+'SCAN/SCAN@HF_BH76/'
-                tdir_nscf = './FLOSIC/SCAN@{:}_BH76/'.format(aref)
+            if '@' in dfa:
+                tdir_scf = nrlmol_basis_dir+'{:}/{:}_BH76/'.format(tdfa,dfa)
+                td_scf = BH76_analysis(cdir=tdir_scf)
             else:
                 tdir_scf = './FLOSIC/{:}/{:}_BH76/'.format(dfa,dfa)
-                tdir_nscf = './FLOSIC/{:}/{:}@{:}_BH76/'.format(dfa,dfa,aref)
+                td_scf = yaml.load(open(tdir_scf + 'BH76_total.yaml','r'),\
+                    Loader=yaml.Loader)
 
-            td_scf = yaml.load(open(tdir_scf + 'BH76_total.yaml','r'), Loader=yaml.Loader)
+            tdir_nscf = './FLOSIC/{:}/{:}@{:}_BH76/'.format(tdfa,tdfa,aref)
             td_nscf = yaml.load(open(tdir_nscf+'BH76_total.yaml','r'), Loader=yaml.Loader)
 
         else:
 
-            if dfa == 'SCAN@HF':
-                tdir = scf_dir+'SCAN/SCAN@HF_BH76/'
-            else:
-                tdir = scf_dir+'{:}/{:}_BH76/'.format(dfa,dfa)
-
-            tfl = tdir + 'BH76_total.yaml'
-            BH76_analysis(cdir=tdir)
-            td_scf = yaml.load(open(tfl,'r'), Loader=yaml.Loader)
+            td_scf = td_scf_default.copy()
 
             tref = aref
             if aref == 'SCAN@HF':
                 tref = 'HF'
 
             if aref in ['S25X','S50X']:
-                if dfa == 'SCAN@HF':
-                    tdir = refs[aref]+'SCAN@{:}_BH76/'.format(tref)
+                if '@' in dfa:
+                    tdir = refs[aref]+'{:}@{:}_BH76/'.format(tdfa,tref)
                 else:
                     tdir = refs[aref]+'{:}@{:}_BH76/'.format(dfa,tref)
             else:
-                if dfa == 'SCAN@HF':
-                    tdir = refs[aref]+'SCAN/SCAN@{:}_BH76/'.format(tref)
+                if '@' in dfa:
+                    tdir = refs[aref]+'{:}/{:}@{:}_BH76/'.format(tdfa,tdfa,tref)
                 else:
                     tdir = refs[aref]+'{:}/{:}@{:}_BH76/'.format(dfa,dfa,tref)
             #print(aref,dfa,tdir)
@@ -177,7 +192,7 @@ for dfa in dfas:
                 wd['MDE'][aref][idx] += tde*adict[asys]
                 wd['MADE'][aref][idx] += abs(tde)*adict[asys]
 
-        for idict,adict in enumerate([td_scf['RX'],td_scf['RC']]):
+        for idict in range(2):
 
             if idict == 0:
                 didx = 'RX'
@@ -278,4 +293,4 @@ for i in range(2):
 
     with open(out_dir+'mde_mfe_{:}.tex'.format(tchar),'w+') as tfl:
         for akey in nstr:
-            tfl.write(nstr[akey])
+            tfl.write(str_rep_rules(nstr[akey]))

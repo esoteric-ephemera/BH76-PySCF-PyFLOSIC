@@ -17,6 +17,9 @@ rdir = path.dirname(path.realpath(__file__)) + '/'
 
 def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
 
+    if cdir[-1] != '/':
+        cdir += '/'
+
     refs = yaml.load(open(rdir + 'BH76_ref_energies.yaml','r'),\
         Loader=yaml.Loader)
 
@@ -41,12 +44,14 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
     md = 0.0
     mad = 0.0
     var = 0.0
+    mape = 0.0
     amax = [-1e20,None]
     amin = [1e20,None]
 
     bh6_md = 0.0
     bh6_mad = 0.0
     bh6_var = 0.0
+    bh6_mape = 0.0
 
     ostr = 'Reaction index, Energy (kcal/mol), Ref (kcal/mol), Error (kcal/mol)\n'
     nrx = 0
@@ -61,6 +66,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
                 tmp += td[aspec]*edict[aspec]
             else:
                 print('WARNING, no computed energy for system '+aspec)
+
         tmp *= eH_to_kcalmol
         err = tmp - refs[indx]['Ref']
         rxd['RX'][indx]['Energy'] = tmp
@@ -69,6 +75,8 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
         md += err
         mad += aerr
         var += aerr**2
+        mape += 100*aerr/abs(refs[indx]['Ref'])
+
         if aerr > amax[0]:
             amax[0] = aerr
             amax[1] = indx
@@ -79,6 +87,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
             bh6_md += err
             bh6_mad += aerr
             bh6_var += aerr**2
+            bh6_mape += 100*aerr/abs(refs[indx]['Ref'])
 
         ostr += ('{:}, '*3 + '{:}\n').format(indx,tmp,refs[indx]['Ref'],err)
 
@@ -88,6 +97,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
     md /= fnrx
     mad /= fnrx
     var /= fnrx
+    mape /= fnrx
     rmsd = var**(0.5)
     stddev = max(0.0,var - mad**2)**(0.5)
     ostr += '--,--,--,--\n'
@@ -96,12 +106,14 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
     ostr += 'RMSD (kcal/mol), {:}, , \n'.format(rmsd)
     ostr += 'VAR (kcal/mol), {:}, , \n'.format(var)
     ostr += 'STDDEV (kcal/mol), {:}, , \n'.format(stddev)
+    ostr += 'MAPE (%), {:}, , \n'.format(mape)
     ostr += 'AMAX (kcal/mol), {:}, index, {:} \n'.format(*amax)
     ostr += 'AMIN (kcal/mol), {:}, index, {:} \n'.format(*amin)
 
     bh6_md /= 6.0
     bh6_mad /= 6.0
     bh6_var /= 6.0
+    bh6_mape /= 6.0
     bh6_rmsd = bh6_var**(0.5)
     bh6_stddev = max(0.0,bh6_var - bh6_mad**2)**(0.5)
     ostr += '\nBH6 MD (kcal/mol), {:}, , \n'.format(bh6_md)
@@ -109,19 +121,20 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
     ostr += 'BH6 RMSD (kcal/mol), {:}, , \n'.format(bh6_rmsd)
     ostr += 'BH6 VAR (kcal/mol), {:}, , \n'.format(bh6_var)
     ostr += 'BH6 STDDEV (kcal/mol), {:}, , \n'.format(bh6_stddev)
+    ostr += 'BH6 MAPE (%), {:}, , \n'.format(bh6_mape)
 
     ofl = cdir + fprefix + 'BH76_errors.csv'
     with open(ofl,'w+') as lfl:
         lfl.write(ostr)
 
     rxd['Stats'] = {'MD': md, 'MAD': mad, 'RMSD': rmsd,
-        'VAR': var, 'STDDEV': stddev,
+        'VAR': var, 'STDDEV': stddev, 'MAPE': mape,
         'AMAX': {'Value': amax[0], 'Index': amax[1]},
         'AMIN': {'Value': amin[0], 'Index': amin[1]}
     }
 
     rxd['BH6 Stats'] = {'MD': bh6_md, 'MAD': bh6_mad, 'RMSD': bh6_rmsd,
-        'VAR': bh6_var, 'STDDEV': bh6_stddev
+        'VAR': bh6_var, 'STDDEV': bh6_stddev, 'MAPE': bh6_mape
     }
 
     if wrc:
@@ -135,6 +148,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
         md = 0.0
         mad = 0.0
         var = 0.0
+        mape = 0.0
         amax = [-1e20,None]
         amin = [1e20,None]
 
@@ -159,6 +173,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
             md += err
             mad += aerr
             var += aerr**2
+            mape += 100*aerr/abs(refs[indx]['Ref'])
             if aerr > amax[0]:
                 amax[0] = aerr
                 amax[1] = indx
@@ -178,6 +193,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
         md /= fnrx
         mad /= fnrx
         var /= fnrx
+        mape /= fnrx
         rmsd = var**(0.5)
         stddev = max(0.0,var - mad**2)**(0.5)
         ostr += '--,--,--,--\n'
@@ -186,6 +202,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
         ostr += 'RMSD (kcal/mol), {:}, , \n'.format(rmsd)
         ostr += 'VAR (kcal/mol), {:}, , \n'.format(var)
         ostr += 'STDDEV (kcal/mol), {:}, , \n'.format(stddev)
+        ostr += 'MAPE (%), {:}, , \n'.format(mape)
         ostr += 'AMAX (kcal/mol), {:}, index, {:} \n'.format(*amax)
         ostr += 'AMIN (kcal/mol), {:}, index, {:} \n'.format(*amin)
 
@@ -194,7 +211,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
             lfl.write(ostr)
 
         rxd['RC Stats'] = {'MD': md, 'MAD': mad, 'RMSD': rmsd,
-            'VAR': var, 'STDDEV': stddev,
+            'VAR': var, 'STDDEV': stddev, 'MAPE': mape,
             'AMAX': {'Value': amax[0], 'Index': amax[1]},
             'AMIN': {'Value': amin[0], 'Index': amin[1]}
         }
@@ -203,7 +220,7 @@ def BH76_analysis(cdir='./',edict={},fprefix='',wrc=True):
     with open(ofl,'w+') as lfl:
         yaml.dump(rxd,lfl,Dumper=yaml.Dumper)
 
-    return
+    return rxd
 
 
 def get_en_dict_yaml(refed,wdir='./'):
